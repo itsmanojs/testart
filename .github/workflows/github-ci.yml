@@ -39,9 +39,9 @@ jobs:
         path: release
     - name: Zip artifacs
       uses: vimtor/action-zip@v1.1
-        with:
-          files: release/
-          dest: nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}.zip
+      with:
+        files: release/
+        dest: nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}.zip
     - name: release
       uses: actions/create-release@v1
       id: create_release
