@@ -29,9 +29,9 @@ jobs:
         tag="nexial-core-v${version}_${{github.run_number}}"
         echo $tag
         echo -n "${tag}" | cat > ./version.txt
+        cd ../
         mkdir release
         tree
-        cd ../
         cp -rf target/*.jar release
         cp -rf target/version.txt release
     - name: Archive artifacts
