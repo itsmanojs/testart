@@ -8,6 +8,7 @@ on:
 
 jobs:
   build-maven-package:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
     - name: Checkout project sources and Setup JDK & Gradle
