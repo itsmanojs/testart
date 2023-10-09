@@ -30,6 +30,7 @@ jobs:
         echo $tag
         echo -n "${tag}" | cat > ./version.txt
         mkdir release
+        tree
         cp -rf target/*.jar release
         cp -rf targeg/*.txt release
     - name: Archive artifacts
