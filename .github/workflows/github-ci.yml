@@ -31,8 +31,9 @@ jobs:
         echo -n "${tag}" | cat > ./version.txt
         mkdir release
         tree
+        cd ../
         cp -rf target/*.jar release
-        cp -rf targeg/*.txt release
+        cp -rf target/version.txt release
     - name: Archive artifacts
       uses: actions/upload-artifact@v3
       with:
