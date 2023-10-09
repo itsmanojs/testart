@@ -48,14 +48,14 @@ jobs:
       run: tree
       # uses: actions/create-release@v1
       id: create_release
-      with:
-        draft: false
-        prerelease: false
-        release_name: ${{steps.version_number.outputs.version_number}}_${{github.run_number}}
-        tag_name: ${{ github.ref }}
-        body_path: CHANGELOG.md
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      # with:
+      #   draft: false
+      #   prerelease: false
+      #   release_name: ${{steps.version_number.outputs.version_number}}_${{github.run_number}}
+      #   tag_name: ${{ github.ref }}
+      #   body_path: CHANGELOG.md
+      # env:
+      #   GITHUB_TOKEN: ${{ github.token }}
     - name: upload the artifact
       uses: actions/upload-release-asset@v1
       env:
