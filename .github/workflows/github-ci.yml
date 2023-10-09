@@ -36,6 +36,7 @@ jobs:
         cp -rf target/version.txt release
     - name: Archive artifacts
       uses: actions/upload-artifact@v3
+      run: tree
       with:
         name: nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}
         path: release
