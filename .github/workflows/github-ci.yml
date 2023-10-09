@@ -1,0 +1,63 @@
+name: Build Jar
+
+on:
+  push:
+    branches:
+      - "master"
+
+
+jobs:
+  build-maven-package:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout project sources and Setup JDK & Gradle
+      uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'oracle'
+    - name: Run the Maven clean package
+      run: mvn clean package
+    - id: version_number
+      name: Create version info
+      run: |
+        echo ${{github.run_number}}
+        version="test_ci_v${{github.run_number}}"
+        echo ${version}
+        echo "version_number=${version}" >> $GITHUB_OUTPUT
+        cd target
+        tag="nexial-core-v${version}_${{github.run_number}}"
+        echo $tag
+        echo -n "${tag}" | cat > ./version.txt
+        mkdir release
+        cp -rf target/*.jar release
+        cp -rf targeg/*.txt release
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}
+        path: release
+    - uses: vimtor/action-zip@v1.1
+        with:
+          files: release/
+          dest: nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}.zip
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{steps.version_number.outputs.version_number}}_${{github.run_number}}
+        tag_name: ${{ github.ref }}
+        body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: upload the artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}.zip
+        asset_name: nexial-core-v${{steps.version_number.outputs.version_number}}_${{github.run_number}}.zip
+        asset_content_type: application/gzip
